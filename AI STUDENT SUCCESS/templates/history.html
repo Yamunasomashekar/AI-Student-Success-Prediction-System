@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            background: #f4f7fb;
+            color: #1e293b;
+            padding: 30px;
+        }
+
+
+        .container {
+            max-width: 1450px;
+            margin: auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+        }
+
+
+        .header h1 {
+            font-size: 42px;
+            color: #1e293b;
+        }
+
+
+        .header p {
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+
+        .btn {
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: white;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+
+        .dashboard-btn {
+            background: #2563eb;
+        }
+
+
+        .dashboard-btn:hover {
+            background: #1d4ed8;
+        }
+
+
+        .home-btn {
+            background: #16a34a;
+        }
+
+
+        .home-btn:hover {
+            background: #15803d;
+        }
+
+
+        /* =========================
+           SEARCH SECTION
+        ========================= */
+
+        .search-section {
+            margin-bottom: 25px;
+        }
+
+
+        .search-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+
+        .search-input {
+            width: 100%;
+            max-width: 700px;
+            padding: 15px 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+        }
+
+
+        .search-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+
+        .search-help {
+            margin-top: 8px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        .search-help span {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+            min-width: 1200px;
+            border-collapse: collapse;
+        }
+
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 16px 14px;
+            text-align: left;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+
+        /* =========================
+           SCORE COLORS
+        ========================= */
+
+        .score {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+
+        .excellent {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+
+        .good {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+
+        .average {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+
+        .needs {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           NO RESULTS
+        ========================= */
+
+        #noResults {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            body {
+                padding: 15px;
+            }
+
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+
+            .buttons {
+                width: 100%;
+            }
+
+
+            .btn {
+                flex: 1;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>Prediction History</h1>
+
+            <p>
+                View and search previous student performance predictions.
+            </p>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <a href="/dashboard"
+               class="btn dashboard-btn">
+
+                Dashboard
+
+            </a>
+
+
+            <a href="/"
+               class="btn home-btn">
+
+                New Prediction
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <div class="search-section">
+
+        <label for="searchInput">
+            Search Prediction Records
+        </label>
+
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Try: ID 1, score 76.05, hours 40, good..."
+            autocomplete="off"
+        >
+
+
+        <div class="search-help">
+
+            Examples:
+
+            <span>ID 1</span> |
+
+            <span>score 76.05</span> |
+
+            <span>hours 40</span> |
+
+            <span>attendance 87</span> |
+
+            <span>good</span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         TABLE
+    ========================= -->
+
+    <div class="table-container">
+
+
+        <table id="historyTable">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Hours Studied</th>
+
+                    <th>Attendance</th>
+
+                    <th>Sleep Hours</th>
+
+                    <th>Previous Score</th>
+
+                    <th>Tutoring Sessions</th>
+
+                    <th>Physical Activity</th>
+
+                    <th>Predicted Score</th>
+
+                    <th>Category</th>
+
+                    <th>Prediction Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="historyBody">
+
+
+                {% for row in records %}
+
+
+                <tr>
+
+
+                    <!-- ID -->
+
+                    <td>
+                        {{ row[0] }}
+                    </td>
+
+
+                    <!-- Hours Studied -->
+
+                    <td>
+                        {{ row[1] }}
+                    </td>
+
+
+                    <!-- Attendance -->
+
+                    <td>
+                        {{ row[2] }}
+                    </td>
+
+
+                    <!-- Sleep Hours -->
+
+                    <td>
+                        {{ row[3] }}
+                    </td>
+
+
+                    <!-- Previous Score -->
+
+                    <td>
+                        {{ row[4] }}
+                    </td>
+
+
+                    <!-- Tutoring Sessions -->
+
+                    <td>
+                        {{ row[5] }}
+                    </td>
+
+
+                    <!-- Physical Activity -->
+
+                    <td>
+                        {{ row[6] }}
+                    </td>
+
+
+                    <!-- =========================
+                         PREDICTED SCORE
+                    ========================= -->
+
+                    <td>
+
+                        {% if row[7]|float >= 90 %}
+
+                            <span class="score excellent">
+
+                                {{ "%.2f"|format(row[7]|float) }}
+
+                            </span>
+
+
+                        {% elif row[7]|float >= 75 %}
+
+                            <span class="score good">
+
+                                {{ "%.2f"|format(row[7]|float) }}
+
+                            </span>
+
+
+                        {% elif row[7]|float >= 60 %}
+
+                            <span class="score average">
+
+                                {{ "%.2f"|format(row[7]|float) }}
+
+                            </span>
+
+
+                        {% else %}
+
+                            <span class="score needs">
+
+                                {{ "%.2f"|format(row[7]|float) }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- =========================
+                         CATEGORY
+                    ========================= -->
+
+                    <td>
+
+                        {% if row[7]|float >= 90 %}
+
+                            <span class="excellent">
+                                Excellent
+                            </span>
+
+
+                        {% elif row[7]|float >= 75 %}
+
+                            <span class="good">
+                                Good
+                            </span>
+
+
+                        {% elif row[7]|float >= 60 %}
+
+                            <span class="average">
+                                Average
+                            </span>
+
+
+                        {% else %}
+
+                            <span class="needs">
+                                Needs Improvement
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- =========================
+                         DATE
+                    ========================= -->
+
+                    <td>
+                        {{ row[9] }}
+                    </td>
+
+
+                </tr>
+
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+
+        <!-- No Results -->
+
+        <div id="noResults">
+
+            No matching records found.
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        AI-Powered Student Success Prediction & Recommendation System
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     SEARCH JAVASCRIPT
+===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const searchInput = document.getElementById("searchInput");
+    const historyBody = document.getElementById("historyBody");
+    const noResults = document.getElementById("noResults");
+
+    searchInput.addEventListener("input", function () {
+
+        const searchText =
+            searchInput.value.trim().toLowerCase();
+
+        const rows =
+            historyBody.querySelectorAll("tr");
+
+        let visibleRows = 0;
+
+
+        /* =====================================
+           EMPTY SEARCH
+        ===================================== */
+
+        if (searchText === "") {
+
+            rows.forEach(function (row) {
+                row.style.display = "";
+            });
+
+            noResults.style.display = "none";
+
+            return;
+        }
+
+
+        /* =====================================
+           ID SEARCH
+           Example: ID 1
+        ===================================== */
+
+        if (searchText.startsWith("id")) {
+
+            const idNumber =
+                searchText
+                .replace(/^id\s*/i, "")
+                .trim();
+
+
+            rows.forEach(function (row) {
+
+                const rowId =
+                    row.cells[0]
+                    .textContent
+                    .trim();
+
+
+                if (rowId === idNumber) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           SCORE SEARCH
+           Example: score 76.05
+        ===================================== */
+
+        else if (searchText.startsWith("score")) {
+
+            const scoreNumber =
+                searchText
+                .replace(/^score\s*/i, "")
+                .trim();
+
+
+            rows.forEach(function (row) {
+
+                const rowScore =
+                    row.cells[7]
+                    .textContent
+                    .trim();
+
+
+                if (
+                    rowScore === scoreNumber
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           HOURS SEARCH
+           Example: hours 40
+        ===================================== */
+
+        else if (searchText.startsWith("hours")) {
+
+            const hoursNumber =
+                searchText
+                .replace(/^hours\s*/i, "")
+                .trim();
+
+
+            rows.forEach(function (row) {
+
+                const rowHours =
+                    row.cells[1]
+                    .textContent
+                    .trim();
+
+
+                if (
+                    rowHours === hoursNumber ||
+                    rowHours === hoursNumber + ".0"
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           ATTENDANCE SEARCH
+           Example: attendance 87
+        ===================================== */
+
+        else if (searchText.startsWith("attendance")) {
+
+            const attendanceNumber =
+                searchText
+                .replace(/^attendance\s*/i, "")
+                .trim();
+
+
+            rows.forEach(function (row) {
+
+                const rowAttendance =
+                    row.cells[2]
+                    .textContent
+                    .trim();
+
+
+                if (
+                    rowAttendance === attendanceNumber ||
+                    rowAttendance === attendanceNumber + ".0"
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           CATEGORY SEARCH
+           ===================================== */
+
+        else if (
+            searchText === "excellent" ||
+            searchText === "good" ||
+            searchText === "average" ||
+            searchText === "needs"
+        ) {
+
+            rows.forEach(function (row) {
+
+                const category =
+                    row.cells[8]
+                    .textContent
+                    .trim()
+                    .toLowerCase();
+
+
+                if (
+                    category.includes(searchText)
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           GENERAL SEARCH
+        ===================================== */
+
+        else {
+
+            rows.forEach(function (row) {
+
+                const rowText =
+                    row.textContent
+                    .toLowerCase();
+
+
+                if (
+                    rowText.includes(searchText)
+                ) {
+
+                    row.style.display = "";
+
+                    visibleRows++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        /* =====================================
+           NO RESULTS
+        ===================================== */
+
+        if (visibleRows === 0) {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    });
+
+});
+
+</script>
+
+
+</body>
+
+</html>
