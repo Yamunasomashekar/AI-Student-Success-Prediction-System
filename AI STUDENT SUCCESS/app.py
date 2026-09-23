@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 import pickle
-import pyodbc
+try:
+    import pyodbc
+except ImportError:
+    pyodbc = None
 import pandas as pd
 from recommendation import get_recommendations
 
@@ -758,51 +761,32 @@ def predict():
         # SAVE TO SQL SERVER
         # =================================================
 
-        save_prediction(
-
-            hours,
-
-            attendance,
-
-            parental_involvement,
-
-            resources,
-
-            extracurricular,
-
-            sleep,
-
-            previous_scores,
-
-            motivation,
-
-            internet,
-
-            tutoring,
-
-            income,
-
-            teacher,
-
-            school,
-
-            peer,
-
-            physical_activity,
-
-            disability,
-
-            education,
-
-            distance,
-
-            gender,
-
-            prediction,
-
-            recommendations
-        )
-
+try:
+    save_prediction(
+        hours,
+        attendance,
+        parental_involvement,
+        resources,
+        extracurricular,
+        sleep,
+        previous_scores,
+        motivation,
+        internet,
+        tutoring,
+        income,
+        teacher,
+        school,
+        peer,
+        physical_activity,
+        disability,
+        education,
+        distance,
+        gender,
+        prediction,
+        recommendations
+    )
+except Exception as e:
+    print("Database unavailable:", e)
 
         # =================================================
         # SHOW RESULT
